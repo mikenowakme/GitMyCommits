@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-  var commitFetcher = CommitResponseFetcher("mikenowakme", for: "GitMyCommits")
+  @ObservedObject var commitFetcher = CommitResponseFetcher("mikenowakme", for: "GitMyCommits")
   
     var body: some View {
-      Text(commitFetcher.commits.debugDescription)
-            .padding()
+      List(commitFetcher.commits, id: \.node_id)  { commit in
+        Text(commit.node_id)
+      }
     }
 }
 

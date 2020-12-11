@@ -59,10 +59,10 @@ struct CommitResponse: Decodable {
   }
 }
 
-class CommitResponseFetcher {
+class CommitResponseFetcher: ObservableObject {
   let user: String
   let repository: String
-  var commits = [CommitResponse]()
+  @Published var commits = [CommitResponse]()
   
   init(_ user: String, for repository: String) {
     self.user = user
