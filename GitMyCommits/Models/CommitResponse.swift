@@ -58,3 +58,31 @@ struct CommitResponse: Decodable {
     case commit
   }
 }
+
+class CommitResponseFetcher {
+  let user: String
+  let repository: String
+  var commits = [CommitResponse]()
+  
+  init(_ user: String, for repository: String) {
+    self.user = user
+    self.repository = repository
+    
+    fetch()
+  }
+  
+  func fetch() {
+    let url = URL(string: "https://api.github.com/repos/\(user)/\(repository)/commits")!
+    
+    URLSession.shared.dataTask(with: url) { (data, response, error) in
+      do {
+        let fetchedCommits = try JSONDecoder().self.decode([CommitResponse].self, from: data!)
+        
+        self.commits = fetchedCommits;
+      }
+      catch {
+        print("Could not fetch", error)
+      }
+    }.resume()
+  }
+}

@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+  var commitFetcher = CommitResponseFetcher("mikenowakme", for: "GitMyCommits")
+  
     var body: some View {
-        Text("Hello, world!")
+      Text(commitFetcher.commits.debugDescription)
             .padding()
     }
 }
