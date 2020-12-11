@@ -11,15 +11,29 @@ struct ContentView: View {
   @ObservedObject var commitFetcher = CommitResponseFetcher("mikenowakme", for: "GitMyCommits")
   
     var body: some View {
-      List(commitFetcher.commits) { commit in
-        VStack(alignment: .leading) {
-          Text(commit.commit.author.name)
-            .font(.title)
-          Text(commit.commit.committer.date)
-            .font(.caption)
-          Text(commit.commit.message)
-            .font(.callout)
-        }
+      NavigationView {
+        List(commitFetcher.commits) { commit in
+          VStack(alignment: .leading) {
+            HStack(alignment: .center) {
+              Text(commit.commit.author.name)
+              .font(.title)
+              Spacer()
+              Text(commit.commitHash.padding(toLength: 7, withPad: "", startingAt: 0))
+                .font(.caption)
+                .bold()
+                .lineLimit(1)
+            }
+
+            Text(commit.commit.message)
+              .font(.callout)
+            
+            HStack {
+              Spacer()
+              Text(commit.commit.author.date)
+                .font(.caption)
+            }
+          }
+        }.navigationTitle("GetMyCommits")
       }
     }
 }

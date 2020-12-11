@@ -51,10 +51,12 @@ extension CommitInfo: Decodable {
 
 struct CommitResponse: Decodable, Identifiable {
   let id: String
+  let commitHash: String
   let commit: CommitInfo
   
   enum CodingKeys: String, CodingKey {
     case id = "node_id"
+    case commitHash = "sha"
     case commit
   }
 }
