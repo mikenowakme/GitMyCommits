@@ -12,7 +12,14 @@ struct ContentView: View {
   
     var body: some View {
       List(commitFetcher.commits) { commit in
-        Text(commit.id)
+        VStack(alignment: .leading) {
+          Text(commit.commit.author.name)
+            .font(.title)
+          Text(commit.commit.committer.date)
+            .font(.caption)
+          Text(commit.commit.message)
+            .font(.callout)
+        }
       }
     }
 }
