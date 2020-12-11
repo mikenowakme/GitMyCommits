@@ -12,27 +12,8 @@ struct ContentView: View {
   
     var body: some View {
       NavigationView {
-        List(commitFetcher.commits) { commit in
-          VStack(alignment: .leading) {
-            HStack(alignment: .center) {
-              Text(commit.commit.author.name)
-              .font(.title)
-              Spacer()
-              Text(commit.commitHash.padding(toLength: 7, withPad: "", startingAt: 0))
-                .font(.caption)
-                .bold()
-                .lineLimit(1)
-            }
-
-            Text(commit.commit.message)
-              .font(.callout)
-            
-            HStack {
-              Spacer()
-              Text(commit.commit.author.date)
-                .font(.caption)
-            }
-          }
+        List(commitFetcher.commits) { commitResponse in
+          CommitResponseRow(commitResponse: commitResponse)
         }.navigationTitle("GetMyCommits")
       }
     }
@@ -42,4 +23,35 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
+}
+
+struct CommitResponseRow: View {
+  let commitResponse: CommitResponse
+  
+  var body: some View {
+    VStack(alignment: .leading) {
+      HStack(alignment: .center) {
+        Text(commitResponse.commit.author.name)
+          .font(.title2)
+          .bold()
+        Spacer()
+        Text(commitResponse.commitHash)
+          .font(.caption)
+          .bold()
+          .lineLimit(1)
+      }
+      
+      Text(commitResponse.commit.message)
+        .font(.callout)
+      
+      Spacer()
+      
+      HStack {
+        Spacer()
+        Text("\(commitResponse.commit.author.date)")
+          .font(.caption2)
+          .lineLimit(1)
+      }
+    }
+  }
 }

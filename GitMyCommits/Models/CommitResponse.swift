@@ -24,7 +24,7 @@ import Foundation
 struct PersonInfo {
   let name: String
   let email: String
-  let date: String
+  let date: Date
 }
 
 extension PersonInfo: Decodable {
@@ -51,12 +51,18 @@ extension CommitInfo: Decodable {
 
 struct CommitResponse: Decodable, Identifiable {
   let id: String
-  let commitHash: String
+  let sha: String
   let commit: CommitInfo
+  
+  var commitHash: String {
+    get {
+      return sha.padding(toLength: 7, withPad: "", startingAt: 0)
+    }
+  }
   
   enum CodingKeys: String, CodingKey {
     case id = "node_id"
-    case commitHash = "sha"
+    case sha
     case commit
   }
 }
@@ -78,7 +84,10 @@ class CommitResponseFetcher: ObservableObject {
     
     URLSession.shared.dataTask(with: url) { (data, response, error) in
       do {
-        let fetchedCommits = try JSONDecoder().self.decode([CommitResponse].self, from: data!)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        let fetchedCommits = try decoder.decode([CommitResponse].self, from: data!)
         
         self.commits = fetchedCommits;
       }
