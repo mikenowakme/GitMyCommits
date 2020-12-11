@@ -11,8 +11,8 @@ struct ContentView: View {
   @ObservedObject var commitFetcher = CommitResponseFetcher("mikenowakme", for: "GitMyCommits")
   
     var body: some View {
-      List(commitFetcher.commits, id: \.node_id)  { commit in
-        Text(commit.node_id)
+      List(commitFetcher.commits) { commit in
+        Text(commit.id)
       }
     }
 }
