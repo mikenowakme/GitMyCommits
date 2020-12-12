@@ -70,6 +70,8 @@ struct ContentView_Previews: PreviewProvider {
 struct CommitResponseRow: View {
   let commitResponse: CommitResponse
   
+  let formatter = DateFormatter()
+
   var body: some View {
     VStack(alignment: .leading) {
       HStack(alignment: .center) {
@@ -90,10 +92,17 @@ struct CommitResponseRow: View {
       
       HStack {
         Spacer()
-        Text("\(commitResponse.commit.author.date)")
+        Text("\(formatter.string(from: commitResponse.commit.author.date))")
           .font(.caption2)
           .lineLimit(1)
       }
     }
+  }
+  
+  init(commitResponse: CommitResponse) {
+    self.commitResponse = commitResponse
+    
+    formatter.dateStyle = .long
+    formatter.timeStyle = .short
   }
 }
