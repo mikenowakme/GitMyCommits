@@ -10,19 +10,39 @@ import SwiftUI
 struct ContentView: View {
   @ObservedObject var commitFetcher = CommitResponseFetcher("mikenowakme", for: "GitMyCommits")
   
-    var body: some View {
-      NavigationView {
-        List(commitFetcher.commits) { commitResponse in
-          CommitResponseRow(commitResponse: commitResponse)
-        }.navigationTitle("GetMyCommits")
+  var body: some View {
+    NavigationView {
+      List(commitFetcher.commits) { commitResponse in
+        CommitResponseRow(commitResponse: commitResponse)
+      }
+      .navigationTitle("GetMyCommits")
+      .alert(isPresented: $commitFetcher.errorOccurred) {
+        Alert(title: Text("Hang on"),
+              message: Text(errorMessage(error: commitFetcher.error, statusCode: commitFetcher.statusCode)),
+              dismissButton: .default(Text("Ok")))
       }
     }
+  }
+  
+  fileprivate func errorMessage(error: Error?, statusCode: Int?) -> String {
+    var errorMessage = "An error occured while fetching the git commits for this repository."
+    
+    if let error = error {
+      errorMessage.append(" Error: \(error.localizedDescription)")
+    }
+    
+    if let statusCode = statusCode {
+      errorMessage.append(" Status code: \(statusCode)")
+    }
+    
+    return errorMessage
+  }
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+  static var previews: some View {
+    ContentView()
+  }
 }
 
 struct CommitResponseRow: View {

@@ -62,8 +62,8 @@
 		27F448C9258306AD00A534A8 /* GitMyCommits */ = {
 			isa = PBXGroup;
 			children = (
-				27E501BB258308A3003C12FD /* Models */,
 				27F448CA258306AD00A534A8 /* GitMyCommitsApp.swift */,
+				27E501BB258308A3003C12FD /* Models */,
 				27F448CC258306AD00A534A8 /* ContentView.swift */,
 				27F448CE258306B200A534A8 /* Assets.xcassets */,
 				27F448D3258306B200A534A8 /* Info.plist */,
