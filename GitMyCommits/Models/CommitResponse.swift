@@ -86,22 +86,22 @@ enum CommitResponseError: LocalizedError {
 }
 
 class CommitResponseFetcher: ObservableObject {
-  let user: String
-  let repository: String
+  var repoSettings: RepoSettings? = nil
+  
   @Published var commits = [CommitResponse]()
   @Published var errorOccurred: Bool = false
   @Published var error: Error? = nil
   @Published var statusCode: Int? = nil
   
-  init(_ user: String, for repository: String) {
-    self.user = user
-    self.repository = repository
+  func config(repoSettings: RepoSettings) {
+    self.repoSettings = repoSettings
     
     fetch()
   }
   
   func fetch() {
-    let url = URL(string: "https://api.github.com/repos/\(user)/\(repository)/commits")!
+    guard let repoSettings = repoSettings else { return }
+    let url = URL(string: "https://api.github.com/repos/\(repoSettings.account)/\(repoSettings.repository)/commits")!
     self.errorOccurred = false
     
     URLSession.shared.dataTask(with: url) { (data, response, error) in

@@ -8,20 +8,42 @@
 import SwiftUI
 
 struct ContentView: View {
-  @ObservedObject var commitFetcher = CommitResponseFetcher("mikenowakme", for: "GitMyCommits")
+  var repoSettings: RepoSettings
+  @State var showSettings = false
+
+  @ObservedObject var commitFetcher = CommitResponseFetcher()
   
   var body: some View {
     NavigationView {
       List(commitFetcher.commits) { commitResponse in
         CommitResponseRow(commitResponse: commitResponse)
       }
-      .navigationTitle("GetMyCommits")
+      .navigationTitle(repoSettings.repository)
+      .toolbar {
+        ToolbarItem(placement: .navigationBarTrailing) {
+          NavigationLink("Settings", destination: RepositorySettingsView()
+                          .environmentObject(repoSettings))
+//          Button("Settings") {
+//            showSettings = true
+//          }
+        }
+      }
       .alert(isPresented: $commitFetcher.errorOccurred) {
         Alert(title: Text("Hang on"),
               message: Text(errorMessage(error: commitFetcher.error, statusCode: commitFetcher.statusCode)),
               dismissButton: .default(Text("Ok")))
       }
     }
+    .sheet(isPresented: $showSettings) {
+      RepositorySettingsView()
+        .environmentObject(repoSettings)
+    }
+  }
+  
+  init(repoSettings: RepoSettings) {
+    self.repoSettings = repoSettings
+    
+    commitFetcher.config(repoSettings: repoSettings)
   }
   
   fileprivate func errorMessage(error: Error?, statusCode: Int?) -> String {
@@ -41,7 +63,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
-    ContentView()
+    ContentView(repoSettings: RepoSettings())
   }
 }
 
