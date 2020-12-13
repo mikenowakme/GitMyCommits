@@ -10,7 +10,7 @@
 //    https://api.github.com/users/{user}/{repository}/commits
 
 // You can get a sample like this:
-//    curl -i https://api.github.com/users/mikenowakme/GitMyCommits/commits
+//    curl -i https://api.github.com/repos/mikenowakme/GitMyCommits/commits
 
 import Foundation
 
@@ -46,6 +46,36 @@ extension CommitInfo: Decodable {
     case author
     case committer
     case message
+  }
+}
+
+struct FileInfo {
+  let id: String
+  let filename: String
+  let status: String
+  let additions: Int
+  let deletions: Int
+  let changes: Int
+}
+
+extension FileInfo: Decodable, Identifiable {
+  enum CodingKeys: String, CodingKey {
+    case id = "sha"
+    case filename
+    case status
+    case additions
+    case deletions
+    case changes
+  }
+}
+
+struct Commit {
+  let files: [FileInfo]
+}
+
+extension Commit: Decodable {
+  enum CodingKeys: String, CodingKey {
+    case files
   }
 }
 
@@ -136,6 +166,75 @@ class CommitResponseFetcher: ObservableObject {
           
           DispatchQueue.main.async {
             self.commits = fetchedCommits;
+          }
+        }
+        catch {
+          print("Could not fetch", error)
+        }
+      }
+      else {
+        DispatchQueue.main.async {
+          self.errorOccurred = true
+          self.error = CommitResponseError.unknownMimeType(mimeType: httpResponse.mimeType)
+        }
+      }
+    }.resume()
+  }
+}
+
+class CommitFetcher: ObservableObject {
+  var repoSettings: RepoSettings?
+  var sha: String?
+  
+  @Published var commit: Commit?
+  @Published var errorOccurred: Bool = false
+  @Published var error: Error? = nil
+  @Published var statusCode: Int? = nil
+  
+  func config(repoSettings: RepoSettings, sha: String) {
+    self.repoSettings = repoSettings
+    self.sha = sha
+    
+    fetch()
+  }
+  
+  func fetch() {
+    guard let repoSettings = repoSettings, let sha = sha else { return }
+    let url = URL(string: "https://api.github.com/repos/\(repoSettings.account)/\(repoSettings.repository)/commits/\(sha)")!
+    self.errorOccurred = false
+    
+    URLSession.shared.dataTask(with: url) { (data, response, error) in
+
+      // error checking
+      if let error = error {
+        DispatchQueue.main.async {
+          self.errorOccurred = true
+          self.error = error
+        }
+        return
+      }
+      
+      guard let httpResponse = response as? HTTPURLResponse,
+            (200...299).contains(httpResponse.statusCode) else {
+        let httpResponse = response as? HTTPURLResponse
+        DispatchQueue.main.async {
+          self.errorOccurred = true
+          self.statusCode = httpResponse?.statusCode
+        }
+        return
+      }
+      
+      // Make sure we got a JSON response and we have data
+      if let mimeType = httpResponse.mimeType, mimeType == "application/json",
+         let data = data {
+        do {
+          let decoder = JSONDecoder()
+          decoder.dateDecodingStrategy = .iso8601
+          
+          let fetchedCommit = try decoder.decode(Commit.self, from: data)
+          
+          DispatchQueue.main.async {
+            self.commit = fetchedCommit;
           }
         }
         catch {

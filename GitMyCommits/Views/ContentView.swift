@@ -16,13 +16,24 @@ struct ContentView: View {
   var body: some View {
     NavigationView {
       List(commitFetcher.commits) { commitResponse in
-        CommitResponseRow(commitResponse: commitResponse)
+        NavigationLink(
+          destination: CommitDetailView(repoSettings: repoSettings, commitResponse: commitResponse),
+          label: {
+            CommitResponseRow(commitResponse: commitResponse)
+          })
       }
       .navigationTitle(repoSettings.repository)
       .toolbar {
+        ToolbarItem(placement: .navigationBarLeading) {
+            Button(action: refresh) {
+              Label("Refresh", systemImage: "arrow.clockwise.circle")
+            }
+        }
+        
         ToolbarItem(placement: .navigationBarTrailing) {
           NavigationLink("Settings", destination: RepositorySettingsView()
                           .environmentObject(repoSettings))
+// This would enable the alert version
 //          Button("Settings") {
 //            showSettings = true
 //          }
@@ -44,6 +55,10 @@ struct ContentView: View {
     self.repoSettings = repoSettings
     
     commitFetcher.config(repoSettings: repoSettings)
+  }
+  
+  func refresh() {
+    commitFetcher.fetch()
   }
   
   fileprivate func errorMessage(error: Error?, statusCode: Int?) -> String {
@@ -88,7 +103,7 @@ struct CommitResponseRow: View {
       Text(commitResponse.commit.message)
         .font(.callout)
       
-      Spacer()
+      // Spacer()
       
       HStack {
         Spacer()
