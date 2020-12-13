@@ -135,7 +135,7 @@ class CommitResponseFetcher: ObservableObject {
     self.errorOccurred = false
     
     URLSession.shared.dataTask(with: url) { (data, response, error) in
-
+      
       // error checking
       if let error = error {
         DispatchQueue.main.async {
@@ -180,6 +180,22 @@ class CommitResponseFetcher: ObservableObject {
       }
     }.resume()
   }
+  
+  var errorMessage: String {
+    get {
+      var errorMessage = "An error occured while fetching the git commits for this repository."
+      
+      if let error = error {
+        errorMessage.append(" Error: \(error.localizedDescription)")
+      }
+      
+      if let statusCode = statusCode {
+        errorMessage.append(" Status code: \(statusCode)")
+      }
+      
+      return errorMessage
+    }
+  }
 }
 
 class CommitFetcher: ObservableObject {
@@ -204,7 +220,7 @@ class CommitFetcher: ObservableObject {
     self.errorOccurred = false
     
     URLSession.shared.dataTask(with: url) { (data, response, error) in
-
+      
       // error checking
       if let error = error {
         DispatchQueue.main.async {
@@ -248,5 +264,21 @@ class CommitFetcher: ObservableObject {
         }
       }
     }.resume()
+  }
+  
+  var errorMessage: String {
+    get {
+      var errorMessage = "An error occured while fetching the details for this commit."
+      
+      if let error = error {
+        errorMessage.append(" Error: \(error.localizedDescription)")
+      }
+      
+      if let statusCode = statusCode {
+        errorMessage.append(" Status code: \(statusCode)")
+      }
+      
+      return errorMessage
+    }
   }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
   var repoSettings: RepoSettings
   @State var showSettings = false
-
+  
   @ObservedObject var commitFetcher = CommitResponseFetcher()
   
   var body: some View {
@@ -25,23 +25,20 @@ struct ContentView: View {
       .navigationTitle(repoSettings.repository)
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
-            Button(action: refresh) {
-              Label("Refresh", systemImage: "arrow.clockwise.circle")
-            }
+          Button(action: refresh) {
+            Label("Refresh", systemImage: "arrow.clockwise.circle")
+          }
         }
         
         ToolbarItem(placement: .navigationBarTrailing) {
-          NavigationLink("Settings", destination: RepositorySettingsView()
-                          .environmentObject(repoSettings))
-// This would enable the alert version
-//          Button("Settings") {
-//            showSettings = true
-//          }
+          Button("Settings") {
+            showSettings = true
+          }
         }
       }
       .alert(isPresented: $commitFetcher.errorOccurred) {
         Alert(title: Text("Hang on"),
-              message: Text(errorMessage(error: commitFetcher.error, statusCode: commitFetcher.statusCode)),
+              message: Text(commitFetcher.errorMessage),
               dismissButton: .default(Text("Ok")))
       }
     }
@@ -60,20 +57,6 @@ struct ContentView: View {
   func refresh() {
     commitFetcher.fetch()
   }
-  
-  fileprivate func errorMessage(error: Error?, statusCode: Int?) -> String {
-    var errorMessage = "An error occured while fetching the git commits for this repository."
-    
-    if let error = error {
-      errorMessage.append(" Error: \(error.localizedDescription)")
-    }
-    
-    if let statusCode = statusCode {
-      errorMessage.append(" Status code: \(statusCode)")
-    }
-    
-    return errorMessage
-  }
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -86,7 +69,7 @@ struct CommitResponseRow: View {
   let commitResponse: CommitResponse
   
   let formatter = DateFormatter()
-
+  
   var body: some View {
     VStack(alignment: .leading) {
       HStack(alignment: .center) {

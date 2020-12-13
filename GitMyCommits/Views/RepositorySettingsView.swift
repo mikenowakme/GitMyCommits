@@ -16,37 +16,42 @@ struct RepositorySettingsView: View {
   
   var body: some View {
     NavigationView {
-      Form {
-        TextField("Account", text: $account)
-          .autocapitalization(.none)
-          .disableAutocorrection(true)
-        TextField("Respository", text: $repository)
-          .autocapitalization(.none)
-          .disableAutocorrection(true)
-        
-        HStack {
-          Spacer()
+      VStack {
+        Form {
+          TextField("Account", text: $account)
+            .autocapitalization(.none)
+            .disableAutocorrection(true)
+          TextField("Respository", text: $repository)
+            .autocapitalization(.none)
+            .disableAutocorrection(true)
           
-          Button(action: {
-            saveSettings()
-            self.presentationMode.wrappedValue.dismiss()
-          },
-          label: {
-            Text("Change")
-          })
+          HStack {
+            Spacer()
+            
+            Button(action: saveSettings)
+           {
+              Text("Change")
+            }
+          }
+          
         }
-      }
-      .navigationBarTitle(Text("Change Repository"))
-      .onAppear(perform: {
-        account = repoSettings.account
-        repository = repoSettings.repository
+        
+        .navigationBarTitle(Text("Change Repository"))
+        .onAppear(perform: {
+          account = repoSettings.account
+          repository = repoSettings.repository
       })
+      }
+      
+      
     }
   }
   
   func saveSettings() {
     repoSettings.account = account
     repoSettings.repository = repository
+    
+    self.presentationMode.wrappedValue.dismiss()
   }
 }
 

@@ -29,9 +29,15 @@ struct CommitDetailView: View {
             }
           }
         }
-      }.onAppear {
+      }
+      .onAppear {
         commitFetcher.config(repoSettings: repoSettings,
                              sha: commitResponse.sha)
+      }
+      .alert(isPresented: $commitFetcher.errorOccurred) {
+        Alert(title: Text("Hang on"),
+              message: Text(commitFetcher.errorMessage),
+              dismissButton: .default(Text("Ok")))
       }
     }
   }

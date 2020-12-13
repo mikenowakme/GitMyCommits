@@ -44,8 +44,8 @@
 		27E501BB258308A3003C12FD /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				27E501BC25830907003C12FD /* CommitResponse.swift */,
 				27B7410F25854CD40049ECAB /* RepoSettings.swift */,
+				27E501BC25830907003C12FD /* CommitResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
