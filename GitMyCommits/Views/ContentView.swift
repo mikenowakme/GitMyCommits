@@ -11,11 +11,11 @@ struct ContentView: View {
   var repoSettings: RepoSettings
   @State var showSettings = false
   
-  @ObservedObject var commitFetcher = CommitResponseFetcher()
+  @ObservedObject var commitResponseFetcher = CommitResponseFetcher()
   
   var body: some View {
     NavigationView {
-      List(commitFetcher.commits) { commitResponse in
+      List(commitResponseFetcher.commits) { commitResponse in
         NavigationLink(
           destination: CommitDetailView(repoSettings: repoSettings, commitResponse: commitResponse),
           label: {
@@ -36,26 +36,25 @@ struct ContentView: View {
           }
         }
       }
-      .alert(isPresented: $commitFetcher.errorOccurred) {
+      .alert(isPresented: $commitResponseFetcher.errorOccurred) {
         Alert(title: Text("Hang on"),
-              message: Text(commitFetcher.errorMessage),
+              message: Text(commitResponseFetcher.errorMessage),
               dismissButton: .default(Text("Ok")))
       }
     }
     .sheet(isPresented: $showSettings) {
-      RepositorySettingsView()
-        .environmentObject(repoSettings)
+      RepositorySettingsView().environmentObject(repoSettings)
     }
   }
   
   init(repoSettings: RepoSettings) {
     self.repoSettings = repoSettings
     
-    commitFetcher.config(repoSettings: repoSettings)
+    commitResponseFetcher.config(repoSettings: repoSettings)
   }
   
   func refresh() {
-    commitFetcher.fetch()
+    commitResponseFetcher.fetch()
   }
 }
 

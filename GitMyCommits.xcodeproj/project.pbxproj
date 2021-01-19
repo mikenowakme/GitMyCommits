@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		27B7410D25854B760049ECAB /* RepositorySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B7410C25854B760049ECAB /* RepositorySettingsView.swift */; };
 		27B7411025854CD40049ECAB /* RepoSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B7410F25854CD40049ECAB /* RepoSettings.swift */; };
+		27C8275825B65D5800D1E220 /* CommitResponseFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C8275725B65D5800D1E220 /* CommitResponseFetcher.swift */; };
+		27C8275C25B65D9600D1E220 /* CommitFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C8275B25B65D9600D1E220 /* CommitFetcher.swift */; };
 		27D1324425869C4A0088536B /* CommitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D1324325869C4A0088536B /* CommitDetailView.swift */; };
-		27E501BD25830907003C12FD /* CommitResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E501BC25830907003C12FD /* CommitResponse.swift */; };
+		27E501BD25830907003C12FD /* Commits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E501BC25830907003C12FD /* Commits.swift */; };
 		27F448CB258306AD00A534A8 /* GitMyCommitsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F448CA258306AD00A534A8 /* GitMyCommitsApp.swift */; };
 		27F448CD258306AD00A534A8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F448CC258306AD00A534A8 /* ContentView.swift */; };
 		27F448CF258306B200A534A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27F448CE258306B200A534A8 /* Assets.xcassets */; };
@@ -20,8 +22,10 @@
 /* Begin PBXFileReference section */
 		27B7410C25854B760049ECAB /* RepositorySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositorySettingsView.swift; sourceTree = "<group>"; };
 		27B7410F25854CD40049ECAB /* RepoSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoSettings.swift; sourceTree = "<group>"; };
+		27C8275725B65D5800D1E220 /* CommitResponseFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommitResponseFetcher.swift; sourceTree = "<group>"; };
+		27C8275B25B65D9600D1E220 /* CommitFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommitFetcher.swift; sourceTree = "<group>"; };
 		27D1324325869C4A0088536B /* CommitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommitDetailView.swift; sourceTree = "<group>"; };
-		27E501BC25830907003C12FD /* CommitResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommitResponse.swift; sourceTree = "<group>"; };
+		27E501BC25830907003C12FD /* Commits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Commits.swift; sourceTree = "<group>"; };
 		27F448C7258306AD00A534A8 /* GitMyCommits.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitMyCommits.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27F448CA258306AD00A534A8 /* GitMyCommitsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitMyCommitsApp.swift; sourceTree = "<group>"; };
 		27F448CC258306AD00A534A8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,7 +49,9 @@
 			isa = PBXGroup;
 			children = (
 				27B7410F25854CD40049ECAB /* RepoSettings.swift */,
-				27E501BC25830907003C12FD /* CommitResponse.swift */,
+				27E501BC25830907003C12FD /* Commits.swift */,
+				27C8275725B65D5800D1E220 /* CommitResponseFetcher.swift */,
+				27C8275B25B65D9600D1E220 /* CommitFetcher.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -166,10 +172,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27C8275C25B65D9600D1E220 /* CommitFetcher.swift in Sources */,
 				27D1324425869C4A0088536B /* CommitDetailView.swift in Sources */,
-				27E501BD25830907003C12FD /* CommitResponse.swift in Sources */,
+				27E501BD25830907003C12FD /* Commits.swift in Sources */,
 				27F448CD258306AD00A534A8 /* ContentView.swift in Sources */,
 				27F448CB258306AD00A534A8 /* GitMyCommitsApp.swift in Sources */,
+				27C8275825B65D5800D1E220 /* CommitResponseFetcher.swift in Sources */,
 				27B7410D25854B760049ECAB /* RepositorySettingsView.swift in Sources */,
 				27B7411025854CD40049ECAB /* RepoSettings.swift in Sources */,
 			);
